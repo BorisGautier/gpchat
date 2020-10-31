@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Created by Boris Gautier on 31/$today.mounth/2020
+  -->
+
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <foreground android:drawable="@mipmap/ic_launcher_foreground"/>
+</adaptive-icon>
