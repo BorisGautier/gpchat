@@ -202,7 +202,7 @@
     <string name="video_call">Appel vidéo</string>
     <string name="voice_call">Appel vocal</string>
     <string name="delete_calls_confirmation">Supprimer les appels sélectionnés?</string>
-    <string name="viewed_statuses">Mises à jour de la chaîne</string>
+    <string name="viewed_statuses">Mises à jour Vues</string>
     <string name="video_length_is_too_long">La longueur de la vidéo est trop longue</string>.
     <string name="there_is_active_call_currently">Il y a déjà un appel actif</string>.
     <string name="status_uploaded">Statut uploadé avec succès</string>
