@@ -141,7 +141,7 @@ class CallsFragment : BaseFragment(), ActionMode.Callback, CallsAdapter.OnClickL
     override fun onQueryTextChange(newText: String?) {
         super.onQueryTextChange(newText)
 
-            adapter?.filter(newText)
+        adapter?.filter(newText)
 
     }
 
@@ -154,12 +154,12 @@ class CallsFragment : BaseFragment(), ActionMode.Callback, CallsAdapter.OnClickL
     override fun onItemClick(selectedCircle: HidelyImageView, itemView: View, fireCall: FireCall) {
         if (actionMode != null) {
             if (selectedFireCallListActionMode.contains(fireCall)) itemRemovedFromActionList(selectedCircle, itemView, fireCall) else itemAddedToActionList(selectedCircle, itemView, fireCall)
-        } else if (fireCall.user != null && fireCall.user.uid != null) PerformCall(requireActivity(),fireManager,disposables).performCall(fireCall.isVideo, fireCall.user.uid)
+        } else if (fireCall.user != null && fireCall.user.uid != null) PerformCall(activity,fireManager,disposables).performCall(fireCall.isVideo, fireCall.user.uid)
     }
 
     override fun onIconButtonClick(view: View, fireCall: FireCall) {
         if (actionMode != null) return
-        if (fireCall.user != null && fireCall.user.uid != null) PerformCall(requireActivity(),fireManager,disposables).performCall(fireCall.isVideo, fireCall.user.uid)
+        if (fireCall.user != null && fireCall.user.uid != null) PerformCall(activity,fireManager,disposables).performCall(fireCall.isVideo, fireCall.user.uid)
     }
 
     override fun onLongClick(selectedCircle: HidelyImageView, itemView: View, fireCall: FireCall) {

@@ -1,13 +1,19 @@
 package cm.tbg.gpchat.activities
 
+import android.Manifest
+import android.content.ComponentName
+import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Bundle
+import android.os.IBinder
 import androidx.appcompat.app.AppCompatActivity
 import cm.tbg.gpchat.Base
 import cm.tbg.gpchat.extensions.observeChildEvent
 import cm.tbg.gpchat.extensions.setValueRx
 import cm.tbg.gpchat.extensions.toMap
 import cm.tbg.gpchat.model.constants.DBConstants
+import cm.tbg.gpchat.model.realms.User
 import cm.tbg.gpchat.utils.*
 import cm.tbg.gpchat.utils.network.FireManager
 import cm.tbg.gpchat.utils.update.UpdateChecker
@@ -17,6 +23,18 @@ import io.reactivex.rxkotlin.addTo
 
 
 abstract class BaseActivity : AppCompatActivity(), Base {
+    protected var permissionsRecord = arrayOf(Manifest.permission.VIBRATE, Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE)
+    protected var permissionsContact = arrayOf(Manifest.permission.READ_CONTACTS, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    protected var permissionsStorage = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    protected var permissionsCamera = arrayOf(Manifest.permission.CAMERA, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    protected var permissionsSinch = arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO, Manifest.permission.MODIFY_AUDIO_SETTINGS, Manifest.permission.READ_PHONE_STATE)
+
+    @JvmField protected var userMe: User? = null
+    @JvmField protected var helper: Helper? = null
+    @JvmField protected var mContext: Context? = null
+
+
+
     override val disposables = CompositeDisposable()
     abstract fun enablePresence(): Boolean
     private var presenceUtil: PresenceUtil? = null
@@ -32,6 +50,13 @@ abstract class BaseActivity : AppCompatActivity(), Base {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        mContext = this
+        helper = Helper(mContext)
+        userMe = helper!!.loggedInUser
+
+
+        //startService(new Intent(this, FirebaseChatService.class));
+
         needsUpdate = UpdateChecker(this).needsUpdate()
         if (!needsUpdate) {
 
@@ -44,7 +69,7 @@ abstract class BaseActivity : AppCompatActivity(), Base {
                 attachNewMessageListener()
                 attachDeletedMessageListener()
                 attachNewGroupListener()
-                attachNewCallsListener()
+              //  attachNewCallsListener()
             }
         }
     }
@@ -70,7 +95,7 @@ abstract class BaseActivity : AppCompatActivity(), Base {
     }
 
     private fun attachNewGroupListener() {
-        FireConstants.newGroups.child(FireManager.uid).observeChildEvent().subscribe( { snap ->
+        FireConstants.newGroups.child(FireManager.uid).observeChildEvent().subscribe({ snap ->
             val dataSnapshot = snap.value
 
             if (dataSnapshot.value != null) {
@@ -83,11 +108,11 @@ abstract class BaseActivity : AppCompatActivity(), Base {
             }
 
 
-        },{error ->}).addTo(disposables)
+        }, { error -> }).addTo(disposables)
     }
 
     private fun attachDeletedMessageListener() {
-        FireConstants.deletedMessages.child(FireManager.uid).observeChildEvent().subscribe( { snap ->
+        FireConstants.deletedMessages.child(FireManager.uid).observeChildEvent().subscribe({ snap ->
             val dataSnapshot = snap.value
 
             if (dataSnapshot.value != null) {
@@ -100,12 +125,12 @@ abstract class BaseActivity : AppCompatActivity(), Base {
             }
 
 
-        },{error ->}).addTo(disposables)
+        }, { error -> }).addTo(disposables)
     }
 
 
     private fun attachNewMessageListener() {
-        FireConstants.userMessages.child(FireManager.uid).observeChildEvent().subscribe( { snap ->
+        FireConstants.userMessages.child(FireManager.uid).observeChildEvent().subscribe({ snap ->
             val dataSnapshot = snap.value
             if (dataSnapshot.value != null) {
                 (dataSnapshot.child(DBConstants.MESSAGE_ID).value as? String)?.let { messageId ->
@@ -118,11 +143,11 @@ abstract class BaseActivity : AppCompatActivity(), Base {
                 }
 
             }
-        },{error ->}).addTo(disposables)
+        }, { error -> }).addTo(disposables)
     }
 
-    private fun attachNewCallsListener() {
-        FireConstants.userCalls.child(FireManager.uid).observeChildEvent().subscribe( { snap ->
+   /* private fun attachNewCallsListener() {
+        FireConstants.userCalls.child(FireManager.uid).observeChildEvent().subscribe({ snap ->
             val dataSnapshot = snap.value
 
             CallMapper.mapToFireCall(dataSnapshot)?.let { fireCall ->
@@ -134,8 +159,8 @@ abstract class BaseActivity : AppCompatActivity(), Base {
 
 
             }
-        },{error ->}).addTo(disposables)
-    }
+        }, { error -> }).addTo(disposables)
+    }*/
 
     private fun deleteMessage(messageId: String): Completable {
         return FireConstants.userMessages.child(FireManager.uid).child(messageId).setValueRx(null)
@@ -190,10 +215,16 @@ abstract class BaseActivity : AppCompatActivity(), Base {
 
     override fun onDestroy() {
         super.onDestroy()
+        mContext = null
         disposables.dispose()
         presenceUtil?.onDestroy()
 
+
     }
+
+
+
+
 
 
 }

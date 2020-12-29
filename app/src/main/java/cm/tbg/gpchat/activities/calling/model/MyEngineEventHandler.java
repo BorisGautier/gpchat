@@ -1,6 +1,3 @@
-/*
- * Created by Devlomi on 2020
- */
 
 package cm.tbg.gpchat.activities.calling.model;
 

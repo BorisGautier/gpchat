@@ -381,4 +381,6 @@ public class MyStatusActivity extends BaseActivity implements ActionMode.Callbac
     public boolean enablePresence() {
         return false;
     }
+
+
 }

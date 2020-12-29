@@ -16,9 +16,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * Created by Devlomi on 01/02/2017.
- */
+
 
 public class SharedPreferencesManager {
 
@@ -352,5 +350,13 @@ public class SharedPreferencesManager {
 
     public static long getLastActive() {
         return mSharedPref.getLong("last_active", 0);
+    }
+
+    public static void setSinchConfigured(boolean value) {
+        mSharedPref.edit().putBoolean("sinchConfigured", value).apply();
+    }
+
+    public static boolean isSinchConfigured() {
+        return mSharedPref.getBoolean("sinchConfigured", false);
     }
 }

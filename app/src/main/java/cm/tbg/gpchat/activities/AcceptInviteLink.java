@@ -125,4 +125,6 @@ public class AcceptInviteLink extends BaseActivity implements AcceptInviteBottom
     public boolean enablePresence() {
         return false;
     }
+
+
 }

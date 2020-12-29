@@ -1,12 +1,10 @@
-/*
- * Created by Devlomi on 2020
- */
 
-package cm.tbg.gpchat.utils
+/*package cm.tbg.gpchat.utils
 
 import cm.tbg.gpchat.activities.calling.model.CallType
 import cm.tbg.gpchat.model.constants.DBConstants
 import cm.tbg.gpchat.model.constants.FireCallDirection
+import cm.tbg.gpchat.model.constants.FireCallType
 import cm.tbg.gpchat.model.realms.FireCall
 import cm.tbg.gpchat.model.realms.Group
 import cm.tbg.gpchat.model.realms.User
@@ -71,7 +69,7 @@ object CallMapper {
                     user = storedUser
                 }
 
-                return FireCall(callId, user, FireCallDirection.INCOMING, timestamp, phoneNumber, isVideo, typeInt, channel)
+                return FireCall(callId, user, FireCallType.INCOMING, timestamp, phoneNumber, callResult.isVideoOffered)
 
 
             }
@@ -80,4 +78,4 @@ object CallMapper {
         return null
 
     }
-}
+}*/

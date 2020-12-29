@@ -72,7 +72,7 @@
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
-                    android:hint="Search"
+                    android:hint="@string/search_hint"
                     app:closeIcon="@null"
                     app:iconifiedByDefault="false"
                     app:layout_constraintBottom_toBottomOf="parent"

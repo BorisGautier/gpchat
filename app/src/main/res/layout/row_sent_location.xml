@@ -55,7 +55,7 @@
                         android:maxWidth="180dp"
                         android:maxLines="1"
                         android:text="McDonalds"
-                        android:textColor="@color/sent_color_state"
+                        android:textColor="@color/colorAccent"
                         android:textStyle="bold" />
 
 

@@ -220,4 +220,6 @@ public class NewChatActivity extends BaseActivity implements UsersAdapter.OnItem
     public boolean enablePresence() {
         return false;
     }
+
+
 }

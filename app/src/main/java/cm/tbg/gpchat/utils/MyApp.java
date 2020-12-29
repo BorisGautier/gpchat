@@ -27,9 +27,7 @@ import io.agora.rtc.RtcEngine;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 
-/**
- * Created by Devlomi on 13/08/2017.
- */
+
 
 public class MyApp extends Application implements Application.ActivityLifecycleCallbacks {
     private static MyApp mApp = null;

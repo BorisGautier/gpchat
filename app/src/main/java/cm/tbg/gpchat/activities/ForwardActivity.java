@@ -64,6 +64,8 @@ public class ForwardActivity extends BaseActivity {
     }
 
 
+
+
     interface SearchCallback {
         void onQuery(String newText);
 

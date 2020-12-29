@@ -911,4 +911,6 @@ public class UserDetailsActivity extends BaseActivity implements ParticipantsAda
     public boolean enablePresence() {
         return false;
     }
+
+
 }

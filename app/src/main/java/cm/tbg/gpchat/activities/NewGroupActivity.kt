@@ -31,7 +31,7 @@ import io.reactivex.rxkotlin.addTo
 import io.realm.RealmResults
 import java.util.*
 
-class NewGroupActivity : ForwardActivity(), ForwardAdapter.OnUserClick, NewGroupSelectedUsersAdapter.OnUserClick, ForwardActivity.SearchCallback {
+public class NewGroupActivity : ForwardActivity(), ForwardAdapter.OnUserClick, NewGroupSelectedUsersAdapter.OnUserClick, ForwardActivity.SearchCallback {
     private var EXTRA_COUNT = 0
     private var toolbarForward: Toolbar? = null
     private lateinit var rvSelectedUsersNewGroup: RecyclerView
@@ -73,6 +73,8 @@ class NewGroupActivity : ForwardActivity(), ForwardAdapter.OnUserClick, NewGroup
         allUsersAdapter = NewGroupAdapter(users, selectedForwardedUsers, currentUsers, isBroadcast, true, this, this)
         rvGroup.adapter = allUsersAdapter
     }
+
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -120,6 +122,8 @@ class NewGroupActivity : ForwardActivity(), ForwardAdapter.OnUserClick, NewGroup
         }
         setSearchCallback(this)
     }
+
+
 
     private fun createBroadcast(broadcastName: String) {
         val progressDialog = ProgressDialog(this)
