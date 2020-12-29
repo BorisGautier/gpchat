@@ -135,4 +135,6 @@ public class ContactDetailsActivity extends BaseActivity {
     public boolean enablePresence() {
         return false;
     }
+
+
 }

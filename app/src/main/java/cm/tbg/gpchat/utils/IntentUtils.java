@@ -132,6 +132,21 @@ public class IntentUtils {
 
 
 
+
+
+
+
+
+
+
+    public static final String PHONE_CALL_TYPE = "phone-call-type";
+
+    public static final String START_SINCH = "start-sinch";
+
+
+
+
+
     //used to open a maps app with the given location
     public static Intent getOpenMapIntent(RealmLocation location) {
         double latitude = location.getLat();

@@ -1,12 +1,6 @@
 package cm.tbg.gpchat.model.realms;
 
-import cm.tbg.gpchat.activities.calling.model.CallType;
 import cm.tbg.gpchat.utils.TimeHelper;
-import cm.tbg.gpchat.utils.network.FireManager;
-import com.google.firebase.database.ServerValue;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -15,14 +9,15 @@ public class FireCall extends RealmObject {
     @PrimaryKey
     private String callId;
     private User user;
-    private int direction;
+    private int type;
     private long timestamp;
     private int duration;
     private String phoneNumber;
     private boolean isVideo;
+
+    private int direction;
     private int callType;
     private String channel;
-
 
     public String getChannel() {
         return channel;
@@ -32,16 +27,20 @@ public class FireCall extends RealmObject {
         this.channel = channel;
     }
 
-    public boolean isGroupCall(){
-        return callType == CallType.CONFERENCE_VIDEO.getValue() || callType == CallType.CONFERENCE_VOICE.getValue();
-    }
-
     public int getCallType() {
         return callType;
     }
 
     public void setCallType(int callType) {
         this.callType = callType;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public void setDirection(int direction) {
+        this.direction = direction;
     }
 
     public String getCallId() {
@@ -60,12 +59,12 @@ public class FireCall extends RealmObject {
         this.user = user;
     }
 
-    public int getDirection() {
-        return direction;
+    public int getType() {
+        return type;
     }
 
-    public void setDirection(int direction) {
-        this.direction = direction;
+    public void setType(int type) {
+        this.type = type;
     }
 
     public long getTimestamp() {
@@ -108,26 +107,14 @@ public class FireCall extends RealmObject {
     }
 
 
-    public Map toMap() {
-        Map<String, Object> result = new HashMap<>();
-        result.put("timestamp", ServerValue.TIMESTAMP);
-        result.put("callType", callType);
-        result.put("callId", callId);
-        result.put("callerId", FireManager.getUid());
-        result.put("phoneNumber", phoneNumber);
-        result.put("toId", user.getUid());
-        result.put("channel", channel);
-        return result;
-    }
 
-    public FireCall(String callId, User user, int direction, long timestamp, String phoneNumber, boolean isVideo, int callType,String channel) {
+    public FireCall(String callId, User user, int type, long timestamp, String phoneNumber, boolean isVideo) {
         this.callId = callId;
         this.user = user;
-        this.direction = direction;
+        this.type = type;
         this.phoneNumber = phoneNumber;
         this.isVideo = isVideo;
-        this.callType = callType;
-        this.channel = channel;
+
         //convert it to milliseconds if needed
         if (!TimeHelper.isTimestampInMillis(timestamp))
             this.timestamp = timestamp * 1000;
@@ -140,13 +127,11 @@ public class FireCall extends RealmObject {
         return "FireCall{" +
                 "callId='" + callId + '\'' +
                 ", user=" + user +
-                ", type=" + direction +
+                ", type=" + type +
                 ", timestamp=" + timestamp +
                 ", duration=" + duration +
                 ", phoneNumber='" + phoneNumber + '\'' +
                 ", isVideo=" + isVideo +
                 '}';
     }
-
-
 }

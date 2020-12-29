@@ -161,4 +161,6 @@ public class ProfilePhotoDialog extends BaseActivity {
     public boolean enablePresence() {
         return false;
     }
+
+
 }

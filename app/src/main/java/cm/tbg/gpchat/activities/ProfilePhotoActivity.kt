@@ -191,6 +191,8 @@ class ProfilePhotoActivity : BaseActivity() {
         }
     }
 
+
+
     override fun enablePresence() = false
 
     private fun pickImages() {

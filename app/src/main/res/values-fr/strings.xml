@@ -198,7 +198,7 @@
     <string name="decline">REFUSER</string>
     <string name="incoming_video_call">Appel vidéo entrant</string>
     <string name="incoming_voice_call">Appel vocal entrant</string>
-    <string name="hangup">HANGUP</string>
+    <string name="hangup">RACCROCHER</string>
     <string name="video_call">Appel vidéo</string>
     <string name="voice_call">Appel vocal</string>
     <string name="delete_calls_confirmation">Supprimer les appels sélectionnés?</string>
@@ -214,7 +214,7 @@
     <string name="hours_ago">il y a quelques heures</string>
     <string name="yesterday_at">Hier à</string>
     <string name="today_at">Aujourd\'hui à</string>
-    <string name="days_ago">il y a plusieurs jours</string>
+    <string name="days_ago">il y a %1$s jours</string>
     <string name="just_now">Juste maintenant</string>
     <string name="today">Aujourd\'hui</string>
     <string name="yesterday">Hier</string>
@@ -466,10 +466,17 @@
     <string name="security_finger">lorsque cette option est activée, vous utiliserez votre empreinte digitale pour ouvrir l\'app</string>
 
 
+    <string name="voice_calling">Appel vocal</string>
+    <string name="video_calling">Appel video</string>
+    <string name="video_calling_in">Appel vidéo entrant</string>
+    <string name="voice_calling_in">Appel vocal entrant</string>
+
+    <string name="permission_mic">Cette application doit être autorisée à utiliser votre microphone pour fonctionner correctement.</string>
+
+    <string name="gave_miss">Vous a donné un coup de fil</string>
 
 
-
-
+    <string name="search">Rechercher</string>
 
 
 

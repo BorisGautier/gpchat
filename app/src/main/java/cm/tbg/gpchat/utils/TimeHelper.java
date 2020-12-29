@@ -9,9 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-/**
- * Created by Devlomi on 24/02/2018.
- */
+
 
 public class TimeHelper {
 
@@ -19,8 +17,8 @@ public class TimeHelper {
 
     //this will format time and get when the user was last seen
     public static String getTimeAgo(long timestamp) {
-        SimpleDateFormat fullDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.ENGLISH);
+        SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.FRENCH);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.FRENCH);
 
         Date timestampDate = new Date();
         timestampDate.setTime(timestamp);
@@ -38,12 +36,12 @@ public class TimeHelper {
             return "" /* now */;
         else if (secondsAgo < hour)
             //minutes ago
-            return secondsAgo / minute + SEPARATOR + MyApp.context().getResources().getString(R.string.minutes_ago);
+            return  MyApp.context().getResources().getString(R.string.minutes_ago);
         else if (secondsAgo < day) {
             //hours ago
             int hoursAgo = (int) (secondsAgo / hour);
             if (hoursAgo <= 5)
-                return hoursAgo + SEPARATOR + MyApp.context().getResources().getString(R.string.hours_ago);
+                return  MyApp.context().getResources().getString(R.string.hours_ago);
 
             //today at + time AM or PM
             return MyApp.context().getResources().getString(R.string.today_at) + SEPARATOR + timeFormat.format(timestampDate);
@@ -54,7 +52,7 @@ public class TimeHelper {
                 return MyApp.context().getResources().getString(R.string.yesterday_at) + SEPARATOR + timeFormat.format(timestampDate);
 
             //days ago
-            return secondsAgo / day + SEPARATOR + MyApp.context().getResources().getString(R.string.days_ago);
+            return  MyApp.context().getResources().getString(R.string.days_ago);
         }
 
         //otherwise it's been a long time show the full date
@@ -77,9 +75,9 @@ public class TimeHelper {
         1/15/17 ,10:46PM
 
          */
-        SimpleDateFormat fullDateFormat = new SimpleDateFormat("yyyy/MM/dd , hh:mm a", Locale.ENGLISH);
-        SimpleDateFormat monthFormat = new SimpleDateFormat("MMM d", Locale.ENGLISH);
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.ENGLISH);
+        SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd MMM yyyy , HH:mm", Locale.FRENCH);
+        SimpleDateFormat monthFormat = new SimpleDateFormat("d MMM", Locale.FRENCH);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.FRENCH);
 
 
         Date timestampDate = new Date();
@@ -119,7 +117,7 @@ public class TimeHelper {
 
     //this will return only the time of message with am or pm
     public static String getMessageTime(String timestamp) {
-        SimpleDateFormat format = new SimpleDateFormat("hh:mm a", Locale.ENGLISH);
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm", Locale.FRENCH);
         Date date = new Date(Long.parseLong(timestamp));
         return format.format(date);
     }
@@ -127,7 +125,7 @@ public class TimeHelper {
 
     //get chat time
     public static String getChatTime(long timestamp) {
-        SimpleDateFormat fullDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
+        SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.FRENCH);
 
 
         Date timestampDate = new Date();
@@ -202,7 +200,7 @@ public class TimeHelper {
     public static String getDate(long timestamp) {
         Date date = new Date();
         date.setTime(timestamp);
-        SimpleDateFormat fullDateFormat = new SimpleDateFormat("yyyy/MM/dd", Locale.ENGLISH);
+        SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd MMM yyyy", Locale.FRENCH);
         return fullDateFormat.format(date);
     }
 
@@ -250,7 +248,7 @@ public class TimeHelper {
 
     public static String getStatusTime(long timestamp) {
 
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.ENGLISH);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.FRENCH);
 
         Date timestampDate = new Date();
         timestampDate.setTime(timestamp);
@@ -290,9 +288,9 @@ public class TimeHelper {
 
     public static String getCallTime(long timestamp) {
 
-        SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm a", Locale.ENGLISH);
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd hh:mm a", Locale.ENGLISH);//eg: October 9, 6:10PM
-        SimpleDateFormat fullDateFormat = new SimpleDateFormat("yyyy/MM/dd, hh:mm a", Locale.ENGLISH);
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.FRENCH);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM HH:mm", Locale.FRENCH);//eg: October 9, 6:10PM
+        SimpleDateFormat fullDateFormat = new SimpleDateFormat("dd MMM yy, HH:mm", Locale.FRENCH);
 
         Date timestampDate = new Date();
 
@@ -316,7 +314,7 @@ public class TimeHelper {
     }
 
     public static String getLastBackupTime(long timestamp) {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMMM dd, hh:mm a", Locale.ENGLISH);//eg: October 9, 6:10PM
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd MMMM, HH:mm", Locale.FRENCH);//eg: October 9, 6:10PM
         Date timestampDate = new Date();
         timestampDate.setTime(timestamp);
         return simpleDateFormat.format(timestampDate);
@@ -343,7 +341,7 @@ public class TimeHelper {
     @Nullable
     public static String getYYYYMMDD() {
         Date date = new Date();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd", Locale.ENGLISH);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyy", Locale.FRENCH);
         return simpleDateFormat.format(date);
 
     }

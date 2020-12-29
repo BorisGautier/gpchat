@@ -1,4 +1,5 @@
 <resources>
+    <string name="agora_token" translatable="false">0066a07b0fdf03a4780ac5c3b891c18581dIAALyToc7En0XEL/dUznZRW4/sXFC4r2AiEs/2NwymGHJzhTOBkAAAAAIgD18wAADzzrXwQAAQCf+OlfAwCf+OlfAgCf+OlfBACf+Olf</string>
     <string name="view_contact">View Contact</string>
     <string name="sign_in_cancelled">Cancelled</string>
     <string name="unknown_error">Unknown Error</string>
@@ -491,7 +492,6 @@
     <string name="could_not_add_fingerprint">Could not add Fingerprint</string>
 
 
-
     <string name="initiating">INITIATING</string>
     <string name="waiting_for_answer">WAITING FOR ANSWER</string>
     <string name="failed">FAILED</string>
@@ -502,8 +502,16 @@
 
     <string name="security_finger">when enabled, you will use your fingerprint to open the app</string>
 
+    <string name="voice_calling">Voice Calling</string>
+    <string name="video_calling">Video Calling</string>
+    <string name="video_calling_in">Incoming video call</string>
+    <string name="voice_calling_in">Incoming voice call</string>
 
+    <string name="permission_mic">This application needs permission to use your microphone to function properly.</string>
 
+    <string name="gave_miss">Gave you a miss call</string>
+
+    <string name="search">Search</string>
 
 
 </resources>

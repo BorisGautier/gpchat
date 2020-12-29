@@ -15,8 +15,8 @@ android {
         applicationId "cm.tbg.gpchat"
         minSdkVersion 17
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
-        versionName "1.0.3"
+        versionCode 5
+        versionName "1.0.5"
         multiDexEnabled true
 
         vectorDrawables.useSupportLibrary = true
@@ -61,6 +61,13 @@ android {
         resValue 'integer', "max_broadcast_users_count", "100"
         resValue 'integer', "max_group_users_count", "50"
 
+        resValue 'string', "sinch_app_key", "ea831517-90b9-4f2c-a71a-43c52fcbbe8a"
+        resValue 'string', "sinch_app_secret", "TaGfYsFDME2plerdA35K7g=="
+        resValue 'string', "sinch_app_environment", "clientapi.sinch.com"
+
+        resValue 'string', "sinch_app_id", "ea831517-90b9-4f2c-a71a-43c52fcbbe8a"
+        resValue 'string', "sinch_app_secret", "TaGfYsFDME2plerdA35K7g=="
+
 
     }
 
@@ -91,10 +98,14 @@ androidExtensions {
 
 
 dependencies {
+    implementation(name: 'sinch-android-rtc-3.17.4', version: '3.17.4', ext: 'aar')
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation('com.googlecode.ez-vcard:ez-vcard:0.10.4') {
+        exclude group: 'org.freemarker'
+    }
 
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'com.google.android.material:material:1.0.0'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'androidx.palette:palette:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
@@ -114,9 +125,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.11.0'
     implementation 'com.github.bumptech.glide:annotations:4.11.0'
 
-    implementation 'de.hdodenhof:circleimageview:3.0.0'
+    implementation 'de.hdodenhof:circleimageview:3.0.1'
     implementation 'com.zhihu.android:matisse:0.5.3-beta3'
-    implementation 'com.github.chrisbanes:PhotoView:2.1.4'
+    implementation 'com.github.chrisbanes:PhotoView:2.3.0'
     implementation 'com.vanniktech:emoji-ios:0.6.0'
     implementation 'com.kailashdabhi:om-recorder:1.1.5'
     implementation 'com.github.abdularis:androidbuttonprogress:1.0.2'
@@ -134,7 +145,7 @@ dependencies {
     implementation 'com.github.oxoooo:pull-back-layout:1.0.1'
     implementation 'io.michaelrocks:libphonenumber-android:8.10.14'
     implementation 'org.greenrobot:eventbus:3.1.1'
-    implementation 'com.googlecode.ez-vcard:ez-vcard:0.10.3'
+    implementation 'com.googlecode.ez-vcard:ez-vcard:0.10.4'
     implementation 'androidx.multidex:multidex:2.0.1'
     implementation 'me.zhanghai.android.systemuihelper:library:1.0.0'
     implementation 'com.evernote:android-job:1.2.6'
@@ -188,6 +199,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:18.0.0'
 
     implementation 'com.google.firebase:firebase-perf:19.0.11'
+
+
 
 
 

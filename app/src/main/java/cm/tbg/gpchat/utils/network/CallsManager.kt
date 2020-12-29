@@ -20,11 +20,11 @@ class CallsManager {
 
     }
 
-    fun saveOutgoingCallOnFirebase(fireCall: FireCall, otherUid: String): Completable {
+  /*  fun saveOutgoingCallOnFirebase(fireCall: FireCall, otherUid: String): Completable {
         return FireConstants.newCallsRef.child(otherUid).child(FireManager.uid).child(fireCall.callId).setValueRx(fireCall.toMap())
-    }
+    }*/
 
-    fun saveOutgoingGroupCallOnFirebase(fireCall: FireCall, groupId: String): Completable {
+   /* fun saveOutgoingGroupCallOnFirebase(fireCall: FireCall, groupId: String): Completable {
         val map = mutableMapOf<String, Any>().apply {
             this["timestamp"] = ServerValue.TIMESTAMP
             this["callType"] = fireCall.callType
@@ -34,7 +34,7 @@ class CallsManager {
             this["channel"] = fireCall.channel
         }
         return FireConstants.groupCallsRef.child(groupId).child(fireCall.callId).setValueRx(map)
-    }
+    }*/
 
 
     //this will reject/decline/hangup a call

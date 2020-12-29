@@ -3,7 +3,6 @@ package cm.tbg.gpchat.utils
 import android.content.Context
 import cm.tbg.gpchat.model.constants.*
 import cm.tbg.gpchat.model.realms.*
-import cm.tbg.gpchat.services.CallingService
 import cm.tbg.gpchat.utils.network.CallsManager
 import cm.tbg.gpchat.utils.network.FireManager
 import cm.tbg.gpchat.utils.network.FireManager.Companion.uid
@@ -150,7 +149,7 @@ class NewMessageHandler(val context: Context, val fireManager: FireManager, val 
         }
     }
 
-    fun handleNewCall(fireCall: FireCall) {
+  /*  fun handleNewCall(fireCall: FireCall) {
 
         val storedFirecall = RealmHelper.getInstance().getFireCall(fireCall.callId)
         if (storedFirecall != null) return
@@ -184,6 +183,6 @@ class NewMessageHandler(val context: Context, val fireManager: FireManager, val 
         context.startService(CallingService.getStartIntent(context, fireCall, IntentUtils.NOTIFICATION_ACTION_START_INCOMING))
 
 
-    }
+    }*/
 
 }

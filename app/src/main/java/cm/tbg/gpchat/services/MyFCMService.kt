@@ -1,11 +1,13 @@
 package cm.tbg.gpchat.services
 
+import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Handler
+import android.os.IBinder
 import cm.tbg.gpchat.activities.calling.model.CallType
-import cm.tbg.gpchat.model.constants.DBConstants
-import cm.tbg.gpchat.model.constants.DownloadUploadStat
-import cm.tbg.gpchat.model.constants.FireCallDirection
-import cm.tbg.gpchat.model.constants.MessageType
+import cm.tbg.gpchat.model.constants.*
 import cm.tbg.gpchat.model.realms.*
 import cm.tbg.gpchat.utils.*
 import cm.tbg.gpchat.utils.network.FireManager
@@ -14,6 +16,7 @@ import cm.tbg.gpchat.utils.network.FireManager.Companion.uid
 import cm.tbg.gpchat.utils.update.UpdateChecker
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.sinch.android.rtc.SinchHelpers
 import io.reactivex.disposables.CompositeDisposable
 
 class MyFCMService : FirebaseMessagingService() {
@@ -45,95 +48,28 @@ class MyFCMService : FirebaseMessagingService() {
             newMessageHandler = NewMessageHandler(this, fireManager, disposables)
 
 
+            val data: Map<String, String> = remoteMessage.data
 
-          if (remoteMessage.data.containsKey("event")) {
+            //if this payload is Sinch Call
+            if (SinchHelpers.isSinchPushPayload(remoteMessage.data)) {
+                handleSinchPayload(data)
+            } else if (remoteMessage.data.containsKey("event")) {
                 //this will called when something is changed in group.
                 // like member removed,added,admin changed, group info changed...
-              when {
-                  remoteMessage.data["event"] == "group_event" -> {
-                      handleGroupEvent(remoteMessage)
-                  }
-                  remoteMessage.data["event"] == "new_group" -> {
-                      handleNewGroup(remoteMessage)
-                  }
-                  remoteMessage.data["event"] == "message_deleted" -> {
-                      handleDeletedMessage(remoteMessage)
-                  }
-                  remoteMessage.data["event"] == "new_call" -> {
-                      handleNewCall(remoteMessage)
-                  }
-              }
+                if (remoteMessage.data["event"] == "group_event") {
+                    handleGroupEvent(remoteMessage)
+                } else if (remoteMessage.data["event"] == "new_group") {
+                    handleNewGroup(remoteMessage)
+                } else if (remoteMessage.data["event"] == "message_deleted") {
+                    handleDeletedMessage(remoteMessage)
+                } else if (remoteMessage.data["event"] == "call") {
+                }
             } else {
                 if (remoteMessage.data.containsKey(DBConstants.MESSAGE_ID))
                     handleNewMessage(remoteMessage)
             }
         }
         mainHandler.post(myRunnable)
-    }
-
-    private fun handleNewCall(map: RemoteMessage) {
-        val data = map.data
-
-        data["callId"]?.let { callId ->
-
-
-            val fromId = data["callerId"] ?: ""
-
-            val typeInt = data["callType"]?.toIntOrNull() ?: CallType.VOICE.value
-            val type = CallType.fromInt(typeInt)
-
-
-            val groupId = data["groupId"] ?: ""
-
-            val isGroupCall = type.isGroupCall()
-
-            if (!isGroupCall && uid.isEmpty()) return@let
-            if (isGroupCall && groupId.isEmpty()) return@let
-            val channel = data["channel"] ?: return@let
-
-            val groupName = data["groupName"] ?: ""
-
-            val timestamp = data["timestamp"]?.toLongOrNull() ?: System.currentTimeMillis()
-            val phoneNumber = data["phoneNumber"] ?: ""
-
-            val isVideo = type.isVideo()
-
-            val uid = if (isGroupCall) groupId else fromId
-
-
-            var user: User
-
-            val storedUser = RealmHelper.getInstance().getUser(uid)
-
-            if (storedUser == null) {
-                //make dummy user temporarily
-                user = User().apply {
-                    if (isGroupCall) {
-                        this.uid = groupId!!
-                        this.isGroupBool = true
-                        this.userName = groupName
-                        this.group = Group().apply {
-                            this.groupId = groupId
-                            this.isActive = true
-                            this.setUsers(mutableListOf(SharedPreferencesManager.getCurrentUser()))
-                        }
-
-                    } else {
-                        this.uid = uid
-                        this.phone = phoneNumber
-                    }
-                }
-            } else {
-                user = storedUser
-            }
-
-            val fireCall = FireCall(callId, user, FireCallDirection.INCOMING, timestamp, phoneNumber, isVideo, typeInt, channel)
-
-
-            newMessageHandler.handleNewCall(fireCall)
-
-        }
-
     }
 
     private fun handleNewMessage(remoteMessage: RemoteMessage) {
@@ -255,11 +191,10 @@ class MyFCMService : FirebaseMessagingService() {
 
 
             }
-            //Save it to database and fire notification
         }
 
+        //Save it to database and fire notification
         newMessageHandler.handleNewMessage(phone, message)
-
 
     }
 
@@ -276,11 +211,58 @@ class MyFCMService : FirebaseMessagingService() {
         newMessageHandler.handleGroupEvent(remoteMessage.data)
     }
 
+    private fun handleSinchPayload(data: Map<String, String>) {
+        object : ServiceConnection {
+            private var payload: Map<*, *>? = null
+            override fun onServiceConnected(name: ComponentName, service: IBinder) {
+                if (payload != null) {
+                    val sinchService = service as CallingService.SinchServiceInterface
+                    if (sinchService != null) {
+                        val result = sinchService.relayRemotePushNotificationPayload(payload)
+                        //if the Messages is a call
+                        if (result.isValid && result.isCall) {
+                            val callResult = result.callResult
+                            val callId = callResult.callId
 
+                            //if this call was missed (user did not answer)
+                            if (callResult.isCallCanceled) {
+                                RealmHelper.getInstance().setCallAsMissed(callId)
+                                val user = RealmHelper.getInstance().getUser(callResult.remoteUserId)
+                                val fireCall = RealmHelper.getInstance().getFireCall(callId)
+                                if (user != null && fireCall != null) {
+                                    val phoneNumber = fireCall.phoneNumber
+                                    NotificationHelper(this@MyFCMService).createMissedCallNotification(user, phoneNumber)
+                                }
+                            } else {
+                                val headers = callResult.headers
+                                if (!headers.isEmpty()) {
+                                    val phoneNumber = headers["phoneNumber"]
+                                    val timestampStr = headers["timestamp"]
+                                    if (phoneNumber != null && timestampStr != null) {
+                                        val timestamp = timestampStr.toLong()
+                                        val user = RealmHelper.getInstance().getUser(callResult.remoteUserId)
+                                        val fireCall = FireCall(callId, user, FireCallType.INCOMING, timestamp, phoneNumber, callResult.isVideoOffered)
+                                        RealmHelper.getInstance().saveObjectToRealm(fireCall)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                payload = null
+            }
+
+            override fun onServiceDisconnected(name: ComponentName) {}
+            fun relayMessageData(data: Map<String, String>) {
+                payload = data
+                val intent = Intent(applicationContext, CallingService::class.java)
+                applicationContext.bindService(intent, this, Context.BIND_AUTO_CREATE)
+            }
+        }.relayMessageData(data)
+    }
 
     override fun onDestroy() {
         super.onDestroy()
         disposables.dispose()
     }
 }
-

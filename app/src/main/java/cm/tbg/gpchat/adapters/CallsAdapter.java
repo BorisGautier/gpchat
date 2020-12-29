@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import cm.tbg.gpchat.R;
-import cm.tbg.gpchat.model.constants.FireCallDirection;
+import cm.tbg.gpchat.model.constants.FireCallType;
 import cm.tbg.gpchat.model.realms.FireCall;
 import cm.tbg.gpchat.model.realms.User;
 import cm.tbg.gpchat.utils.RealmHelper;
@@ -97,7 +97,7 @@ public class CallsAdapter extends RealmRecyclerViewAdapter<FireCall, CallsAdapte
             } else
                 tvUsername.setText(fireCall.getPhoneNumber());
 
-            callType.setImageDrawable(getPhoneCallType(fireCall.getDirection()));
+            callType.setImageDrawable(getPhoneCallType(fireCall.getType()));
             btnCall.setImageResource(fireCall.isVideo() ? R.drawable.ic_videocam_blue : R.drawable.ic_phone_blue);
 
             tvCallTime.setText(TimeHelper.getCallTime(fireCall.getTimestamp()));
@@ -146,13 +146,13 @@ public class CallsAdapter extends RealmRecyclerViewAdapter<FireCall, CallsAdapte
             Drawable outgoingDrawable = context.getResources().getDrawable(R.drawable.ic_call_made);
 
             switch (type) {
-                case FireCallDirection.OUTGOING:
+                case FireCallType.OUTGOING:
                     outgoingDrawable.mutate();
                     DrawableCompat.setTintMode(outgoingDrawable, PorterDuff.Mode.SRC_IN);
                     DrawableCompat.setTint(outgoingDrawable, context.getResources().getColor(R.color.colorGreen));
                     return outgoingDrawable;
 
-                case FireCallDirection.ANSWERED:
+                case FireCallType.ANSWERED:
                     incomingDrawable.mutate();
                     DrawableCompat.setTintMode(incomingDrawable, PorterDuff.Mode.SRC_IN);
                     DrawableCompat.setTint(incomingDrawable, context.getResources().getColor(R.color.colorGreen));

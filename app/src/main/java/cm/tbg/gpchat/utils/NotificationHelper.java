@@ -15,8 +15,11 @@ import androidx.core.app.RemoteInput;
 import androidx.core.app.TaskStackBuilder;
 import androidx.core.content.ContextCompat;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+
 import cm.tbg.gpchat.R;
-import cm.tbg.gpchat.activities.calling.CallingActivity;
 import cm.tbg.gpchat.activities.main.MainActivity;
 import cm.tbg.gpchat.activities.main.messaging.ChatActivity;
 import cm.tbg.gpchat.model.realms.Chat;
@@ -26,11 +29,7 @@ import cm.tbg.gpchat.model.realms.User;
 import cm.tbg.gpchat.receivers.HandleReplyReceiver;
 import cm.tbg.gpchat.receivers.MarkAsReadReceiver;
 import cm.tbg.gpchat.services.CallingService;
-
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-
+import cm.tbg.gpchat.activities.calling.CallingActivity;
 import io.realm.RealmList;
 import me.leolin.shortcutbadger.ShortcutBadger;
 
@@ -415,7 +414,7 @@ public class NotificationHelper extends ContextWrapper {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_CHANNEL_ID_MESSAGES)
                 //set app icon
-                .setSmallIcon(R.drawable.ic_noti_icon)
+                .setSmallIcon(R.drawable.logo)
                 .setContentTitle(title)
                 .setContentText(message)
                 //color
@@ -540,7 +539,7 @@ public class NotificationHelper extends ContextWrapper {
     public Notification getAudioNotification() {
         return new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_CHANNEL_ID_AUDIO)
                 //set app icon
-                .setSmallIcon(R.drawable.ic_noti_icon)
+                .setSmallIcon(R.drawable.logo)
                 .setContentTitle(getResources().getString(R.string.playing_audio))
                 .setContentText(getResources().getString(R.string.playing_audio))
                 //color
@@ -552,7 +551,7 @@ public class NotificationHelper extends ContextWrapper {
     public Notification getCallsNotifications(String userName) {
         return new NotificationCompat.Builder(getApplicationContext(), NOTIFICATION_CHANNEL_ID_AUDIO)
                 //set app icon
-                .setSmallIcon(R.drawable.ic_noti_icon)
+                .setSmallIcon(R.drawable.logo)
                 .setContentTitle(userName)
                 .setContentText(userName)
                 //color
@@ -570,7 +569,7 @@ public class NotificationHelper extends ContextWrapper {
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID_CALLING)
-                        .setSmallIcon(R.drawable.ic_noti_icon)
+                        .setSmallIcon(R.drawable.logo)
                         .setContentTitle(getString(R.string.missed_call_notification))
                         .setContentText(user == null ? phone : user.getProperUserName());
 
@@ -589,7 +588,7 @@ public class NotificationHelper extends ContextWrapper {
         getManager().notify(generateId(), mBuilder.build());
     }
 
-    public Notification createActiveCallNotification(FireCall fireCall, int notificationId) {
+  /*  public Notification createActiveCallNotification(FireCall fireCall, int notificationId) {
 
         User user = fireCall.getUser();
         String phoneNumber = fireCall.getPhoneNumber();
@@ -598,7 +597,7 @@ public class NotificationHelper extends ContextWrapper {
         String title = fireCall.isVideo() ? getString(R.string.video_call) : getString(R.string.voice_call);
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID_CALLING)
-                        .setSmallIcon(R.drawable.ic_noti_icon)
+                        .setSmallIcon(R.drawable.logo)
                         .setContentTitle(title)
                         .setOnlyAlertOnce(true)
                         .setContentIntent(notificationPIntent)
@@ -620,17 +619,57 @@ public class NotificationHelper extends ContextWrapper {
         mBuilder.addAction(hangupAction);
         mBuilder.setAutoCancel(true);
         return mBuilder.build();
+    }*/
+
+    public Notification createActiveCallNotification(User user, String phone, String callId, boolean isVideoOffered, int notificationId) {
+
+        PendingIntent notificationPIntent = getNotificationClickPendingIntent(callId);
+
+        String title = isVideoOffered ? getString(R.string.video_call) : getString(R.string.voice_call);
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID_CALLING)
+                        .setSmallIcon(R.drawable.ic_noti_icon)
+                        .setContentTitle(title)
+                        .setOnlyAlertOnce(true)
+                        .setContentIntent(notificationPIntent)
+                        .setContentText(user == null ? phone : user.getProperUserName());
+
+        if (user != null) {
+            Bitmap largeIcon = getProfilePhotoAsBitmap(user.getThumbImg());
+            mBuilder.setLargeIcon(largeIcon);
+        }
+
+
+        Intent hangupIntent = new Intent(this, CallingService.class);
+        hangupIntent.putExtra(IntentUtils.CALL_ID, callId);
+        hangupIntent.putExtra(IntentUtils.CALL_ACTION_TYPE, IntentUtils.NOTIFICATION_ACTION_DECLINE);
+        PendingIntent hangupPIntent = PendingIntent.getService(this, notificationId, hangupIntent, PendingIntent.FLAG_ONE_SHOT);
+
+        NotificationCompat.Action hangupAction = new NotificationCompat.Action(R.drawable.baseline_call_end_black_24, getString(R.string.hangup), hangupPIntent);
+
+
+        mBuilder.addAction(hangupAction);
+        mBuilder.setAutoCancel(true);
+        return mBuilder.build();
     }
 
-    private PendingIntent getNotificationClickPendingIntent(FireCall fireCall, int action, int requestCode) {
+
+   /* private PendingIntent getNotificationClickPendingIntent(FireCall fireCall, int action, int requestCode) {
 
         Intent notificationIntent = getCallingActivityIntent(fireCall, action);
 
         return PendingIntent.getActivity(this, requestCode, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+    }*/
+
+    private PendingIntent getNotificationClickPendingIntent(String callId) {
+        Intent notificationIntent = new Intent(this, CallingService.class);
+        notificationIntent.putExtra(IntentUtils.CALL_ID, callId);
+        notificationIntent.putExtra(IntentUtils.CALL_ACTION_TYPE, IntentUtils.NOTIFICATION_ACTION_CLICK);
+        return PendingIntent.getService(this, PI_REQUEST_CODE_CLICK, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     }
 
 
-    private Intent getCallingActivityIntent(FireCall fireCall, int action) {
+  /*  private Intent getCallingActivityIntent(FireCall fireCall, int action) {
         Intent notificationIntent = new Intent(this, CallingActivity.class);
         String callId = fireCall.getCallId();
         notificationIntent.putExtra(IntentUtils.CALL_DIRECTION, fireCall.getDirection());
@@ -642,16 +681,56 @@ public class NotificationHelper extends ContextWrapper {
         notificationIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 //        notificationIntent.addFlags(Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
         return notificationIntent;
+    }*/
+
+    public Notification createIncomingCallNotification(User user, String phone, String callId, boolean isVideoOffered, int notificationId) {
+        PendingIntent notificationPIntent = getNotificationClickPendingIntent(callId);
+        String title = isVideoOffered ? getString(R.string.incoming_video_call) : getString(R.string.incoming_voice_call);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID_CALLING)
+                        .setSmallIcon(R.drawable.ic_noti_icon)
+                        .setContentTitle(title)
+                        .setContentIntent(notificationPIntent)
+                        .setContentText(user == null ? phone : user.getProperUserName());
+
+        if (user != null) {
+            Bitmap largeIcon = getProfilePhotoAsBitmap(user.getThumbImg());
+            mBuilder.setLargeIcon(largeIcon);
+        }
+
+
+        Intent answerIntent = new Intent(this, CallingService.class);
+        answerIntent.putExtra(IntentUtils.CALL_ID, callId);
+        answerIntent.putExtra(IntentUtils.CALL_ACTION_TYPE, IntentUtils.NOTIFICATION_ACTION_ANSWER);
+        PendingIntent pendingIntent = PendingIntent.getService(this, PI_REQUEST_CODE_ANSWER, answerIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Action answerAction = new NotificationCompat.Action(R.drawable.baseline_phone_black_24, getString(R.string.answer), pendingIntent);
+
+
+        Intent declineIntent = new Intent(this, CallingService.class);
+        declineIntent.putExtra(IntentUtils.CALL_ID, callId);
+        declineIntent.putExtra(IntentUtils.CALL_ACTION_TYPE, IntentUtils.NOTIFICATION_ACTION_DECLINE);
+        PendingIntent declinePIntent = PendingIntent.getService(this, PI_REQUEST_CODE_DECLINE, declineIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        NotificationCompat.Action declineAction = new NotificationCompat.Action(R.drawable.baseline_call_end_black_24, getString(R.string.decline), declinePIntent);
+
+
+        mBuilder.addAction(answerAction);
+        mBuilder.addAction(declineAction);
+        mBuilder.setDefaults(Notification.DEFAULT_SOUND);
+        mBuilder.setAutoCancel(true);
+
+        incomingCallNotificationId = notificationId;
+        return mBuilder.build();
     }
 
-    public Notification createIncomingCallNotification(FireCall fireCall, int notificationId) {
+  /*  public Notification createIncomingCallNotification(FireCall fireCall, int notificationId) {
         PendingIntent notificationPIntent = getNotificationClickPendingIntent(fireCall, IntentUtils.NOTIFICATION_ACTION_START_INCOMING, PI_REQUEST_CODE_CLICK);
         String title = fireCall.isVideo() ? getString(R.string.incoming_video_call) : getString(R.string.incoming_voice_call);
 
         User user = fireCall.getUser();
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_ID_INCOMING_CALLS)
-                        .setSmallIcon(R.drawable.ic_noti_icon)
+                        .setSmallIcon(R.drawable.logo)
                         .setContentTitle(title)
                         .setFullScreenIntent(notificationPIntent, true)
                         .setContentText(user == null ? fireCall.getPhoneNumber() : user.getProperUserName());
@@ -683,7 +762,7 @@ public class NotificationHelper extends ContextWrapper {
 
         incomingCallNotificationId = notificationId;
         return mBuilder.build();
-    }
+    }*/
 
     public void cancelIncomingCallNotification() {
         getManager().cancel(incomingCallNotificationId);

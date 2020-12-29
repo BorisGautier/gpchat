@@ -56,7 +56,7 @@
 
     <!--<color name="sent_message_background_color">#71A2A9</color>-->
     <!--<color name="sent_message_background_color">#35607c</color>-->
-    <color name="sent_message_background_color">#3E634B</color>
+    <color name="sent_message_background_color">#792138</color>
     <color name="received_message_background_color">#1D1F27</color>
 
     <color name="sent_message_title_color">#FFFFFF</color>
@@ -141,4 +141,7 @@
         <item>#74676A</item>
         <item>#5696FF</item>
     </string-array>
+
+    <color name="textColorSecondary">#757575</color>
+    <color name="bg_gray">#E0E0E0</color>
 </resources>

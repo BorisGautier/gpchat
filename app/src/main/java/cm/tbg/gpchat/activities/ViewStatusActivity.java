@@ -1312,4 +1312,6 @@ public class ViewStatusActivity extends BaseActivity implements StoriesProgressV
     public boolean enablePresence() {
         return false;
     }
+
+
 }

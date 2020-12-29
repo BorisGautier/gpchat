@@ -236,6 +236,10 @@ public class User extends RealmObject implements Parcelable {
         return 0;
     }
 
+    public static boolean validate(User user) {
+        return user != null && user.getUid() != null && user.getUserName() != null && user.getStatus() != null;
+    }
+
     @Override
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeString(this.uid);

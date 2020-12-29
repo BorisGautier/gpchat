@@ -70,6 +70,7 @@ class MainActivity : BaseActivity(), FabRotationAnimation.RotateAnimationListene
     private var ignoreBatteryDialog: IgnoreBatteryDialog? = null
 
 
+
     override fun enablePresence(): Boolean {
         return true
     }
@@ -177,6 +178,11 @@ class MainActivity : BaseActivity(), FabRotationAnimation.RotateAnimationListene
             FireConstants.usersRef.child(FireManager.uid).child("ver").setValue(AppVerUtil.getAppVersion(this)).addOnSuccessListener { SharedPreferencesManager.setAppVersionSaved(true) }
         }
 
+        if (!SharedPreferencesManager.isSinchConfigured()) {
+            val serviceIntent = Intent(this, CallingService::class.java)
+            serviceIntent.putExtra(IntentUtils.START_SINCH, true)
+            startService(serviceIntent)
+        }
 
 
 
@@ -214,6 +220,8 @@ class MainActivity : BaseActivity(), FabRotationAnimation.RotateAnimationListene
         ignoreBatteryDialog?.dismiss()
         super.goingToUpdateActivity()
     }
+
+
 
 
     //for users who updated the app
