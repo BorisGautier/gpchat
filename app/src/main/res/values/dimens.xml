@@ -1,0 +1,53 @@
+<resources>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="app_bar_height">180dp</dimen>
+    <dimen name="text_margin">16dp</dimen>
+    <dimen name="img_width">250dp</dimen>
+    <dimen name="img_height">250dp</dimen>
+    <dimen name="margin_top_message">8dp</dimen>
+    <dimen name="margin_bottom_message">8dp</dimen>
+    <dimen name="row_gallery_width">130dp</dimen>
+    <dimen name="row_gallery_height">120dp</dimen>
+    <dimen name="new_message_notification_text_size">8sp</dimen>
+    <dimen name="et_message_text_size">16sp</dimen>
+    <dimen name="r_audio_width">275dp</dimen>
+    <dimen name="max_width_group_users">220dp</dimen>.
+    <dimen name="emoji_size_default">20sp</dimen>
+    <dimen name="emoji_size_only_emojis">40sp</dimen>
+    <dimen name="emoji_size_single_emoji">50sp</dimen>
+
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
+    <dimen name="Btn_S">50dp</dimen>
+
+    <!-- Medium Dimensions -->
+    <dimen name="Btn_M">50dp</dimen>
+
+    <!-- Large Dimensions = "Medium Dimensions * 1.5" For Example: 210*1.5 = 315 -->
+    <dimen name="Btn_L">85dp</dimen>
+
+    <!-- XLarge Dimensions = "Medium Dimensions * 2" For Example: 210*1.5 = 420 -->
+    <dimen name="Btn_XL">100dp</dimen>
+
+    <dimen name="editor_size">35dp</dimen>
+    <dimen name="normal_margin">8dp</dimen>
+    <dimen name="large_margin">16dp</dimen>
+    <dimen name="local_preview_margin_top">28dp</dimen>
+    <dimen name="local_preview_margin_right">24dp</dimen>
+
+    <!-- buttons -->
+    <dimen name="call_button_size">60dp</dimen>
+    <dimen name="other_button_size">54dp</dimen>
+
+    <dimen name="local_preview_width">88dp</dimen>
+    <dimen name="local_preview_height">117dp</dimen>
+    <dimen name="local_back_icon_size">50dp</dimen>
+    <dimen name="remote_back_icon_size">100dp</dimen>
+    <dimen name="remote_back_icon_margin_bottom">90dp</dimen>
+
+    <!-- buttons -->
+    <dimen name="control_bottom_margin">24dp</dimen>
+    <dimen name="control_bottom_horizontal_margin">30dp</dimen>
+</resources>
